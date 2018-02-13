@@ -1,0 +1,74 @@
+{% load bootstrap %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ok</title>
+
+</head>
+<body>
+
+<h1>test page</h1>
+{% comment %}<h3>{{ good }}</h3>{% endcomment %}
+
+
+{% comment %}<table border="1">
+    <tr>
+        <th>name</th>
+        <th>version</th>
+        <th>state</th>
+        <th>create</th>
+    </tr>
+    {% for item in  data %}
+        <tr>
+            <td>{{ item.group_name }}</td>
+            <td>{{ item.explanation }}</td>
+        </tr>
+    {% endfor %}
+    {% for item in  group_user_count %}
+        <tr>
+            <td>{{ item.group_name }}</td>
+            <td>{{ item.explanation }}</td>
+        </tr>
+    {% endfor %}
+</table>{% endcomment %}
+
+    {% comment %}{% for k,v in  context.group_user_count.items %}
+        <tr>
+            <td>k</td>
+            <td>v</td>
+        </tr>
+    {% endfor %}{% endcomment %}
+
+
+
+{% comment %}<p>{{ detail.project_name }}</p>
+<p>{{ detail.deploy_address }}</p>{% endcomment %}
+{% for item in  data %}
+    {#    <h1>{{ results }}</h1> #}
+    <p>{{ item.project_name }}</p>
+    <p>{{ item.svn_address }}</p>
+{% endfor %}
+
+{% comment %}
+{% for k,v in  group_user_count.items%}
+    <p>{{ k }}</p>
+    <p>{{ v }}</p>
+{% endfor %}{% endcomment %}
+
+
+{% comment %}p>{{ results.username }}</p>{% endcomment %}
+{% comment %}<p>{{ results.svn_address }}</p>
+<p>{{ results.relation_person }}</p>
+<p>{{ results.test_address }}</p>
+<p>{{ results.deploy_address }}</p>
+<p>{{ results.description }}</p>
+<p>{{ status }}</p>
+<p>{{ status }}</p>
+<p>{{ status }}</p>{% endcomment %}
+
+{% comment %}{{ form| bootstrap_horizontal }}{% endcomment %}
+
+
+</body>
+</html>

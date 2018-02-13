@@ -1,0 +1,81 @@
+{% extends 'default/base.html' %}
+{% block content %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>项目主机列表 | List Host.</h2>
+        </div>
+        <div class="col-lg-2">
+        </div>
+    </div>
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5> 项目主机列表 </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user"></ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="ibox-content">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="text-center">主机名</th>
+                            <th class="text-center">IP地址</th>
+                            <th class="text-center">所属项目</th>
+                            <th class="text-center">登录用户</th>
+                            <th class="text-center">状态</th>
+                            <th class="text-center">备注</th>
+                            <th class="text-center">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in data %}
+                            <tr>
+                                <td class="text-center">{{ i.host_name }}</td>
+                                <td class="text-center">{{ i.ip }}</td>
+                                <td class="text-center">{{ i.belong_projects }}</td>
+                                <td class="text-center">{{ i.user }}</td>
+                                <td class="text-center">
+                                    {% ifequal i.status  0 %}
+                                        <li class="fa fa-ban" style="color:#696969">离线</li>
+                                    {% else %}
+                                        <li class="fa fa-check-circle-o" style="color:#279048">正常</li>
+                                    {% endifequal %}
+                                </td>
+                                <td class="text-center">{{ i.memo }}</td>
+
+                                <td class="text-center">
+                                    <div class="btn-group" data-toggle="buttons">
+                                        <a href="/config/host_edit/{{ i.uuid }}/" class="btn btn-xs btn-success "
+                                           data-toggle="modal">修改</a>
+                                        <a href="/config/host_del/{{ i.uuid }}/" class="btn btn-xs btn-danger"
+                                           data-toggle="modal">删除</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+
+
+
+

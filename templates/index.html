@@ -1,0 +1,102 @@
+{% extends 'default/base.html' %}
+
+{% block content %}
+
+    <h2>历史发布统计</h2>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="height:400px"></div>
+    <!-- ECharts单文件引入 -->
+    <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
+    <script type="text/javascript">
+        // 路径配置
+        require.config({
+            paths: {
+                echarts: 'http://echarts.baidu.com/build/dist'
+            }
+        });
+         require(
+            [
+                'echarts',
+                'echarts/chart/pie' // 使用柱状图就加载bar模块，按需加载
+            ],
+            function (ec) {
+                // 基于准备好的dom，初始化echarts图表
+                var myChart = ec.init(document.getElementById('main'));
+
+                var option = {
+    title : {
+        text: '发布情况',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient : 'vertical',
+        x : 'left',
+        data:['发布失败','等待发布','发布成功']
+    },
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {
+                show: true,
+                type: ['pie', 'funnel'],
+                option: {
+                    funnel: {
+                        x: '25%',
+                        width: '50%',
+                        funnelAlign: 'left',
+                        max: 1548
+                    }
+                }
+            },
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    series : [
+        {
+            name:'数量',
+            type:'pie',
+            radius : '55%',
+            center: ['50%', '60%'],
+            data:[
+                {value:{{ data.fail }}, name:'发布失败'},
+                {# {value:310, name:'邮件营销'}, #}
+                {# {value:234, name:'联盟广告'}, #}
+                {value:{{ data.wait }}, name:'等待发布'},
+                {value:{{ data.success }}, name:'发布成功'}
+            ]
+        }
+    ]
+};
+
+                // 为echarts对象加载数据
+                myChart.setOption(option);
+            }
+        );
+    </script>
+
+{% endblock content %}
+
+
+
+
+
+
+{% comment %}
+
+{% include "default/header.html" %}
+			<div class="row clearfix">
+                {% include "default/index_left.html" %}
+				{% include "default/index_right.html" %}
+				
+			</div>
+		</div>
+	</div>
+{% include "default/footer.html" %}{% endcomment %}

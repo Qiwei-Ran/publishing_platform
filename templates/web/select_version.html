@@ -1,0 +1,44 @@
+<td class="text-center" style="vertical-align:middle!important"><input type="checkbox" name="selected" value="{{ item.id }}"></td>
+<td class="text-center" style="vertical-align:middle!important"> {{ project_name }} </td>
+<td class="text-center">
+        <select id="select_version"  name="select_version"  class="form-control" onchange="change_version()" >
+          {% for list in item.version %}
+              <option value="{{ item.name }}-{{ list }}">{{ list }}</option>
+          {% endfor %}
+          </select>
+</td>
+<td class="text-center" style="vertical-align:middle!important"> {{ results.create_time }} </td>
+{% comment %}<td class="text-center" style="vertical-align:middle!important"> {{ item.state }} </td>{% endcomment %}
+{% ifequal results.state 0 %}
+    <td class="text-center" style="vertical-align:middle!important"> 待发布我曹 </td>
+{% endifequal %}
+{% ifequal results.state 1 %}
+    <td class="text-center" style="vertical-align:middle!important"> 测试中 </td>
+{% endifequal %}
+{% ifequal results.state 2 %}
+    <td class="text-center" style="vertical-align:middle!important"> 测试通过 </td>
+{% endifequal %}
+{% ifequal results.state 2 %}
+    <td class="text-center" style="vertical-align:middle!important"> 已发布 </td>
+{% endifequal %}
+{% ifequal results.state '' %}
+    <td class="text-center" style="vertical-align:middle!important"> 空状态 </td>
+{% endifequal %}
+
+<td class="text-center" style="vertical-align:middle!important">
+    <!-- Split button -->
+    <div class="btn-group">
+      <a href="/project/detail/{{ item.id }}/" class="btn btn-info btn-sm" >查看详情</a>
+      <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+      </button>
+      <ul class="dropdown-menu " style="min-width:100%;">
+        <li><a href="#">测试发布</a></li>
+        <li><a href="#">测试确认</a></li>
+        <li><a href="#">项目发布</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="/project/delete/{{ item.id }}/" type="button" id="project_del" name="del_id" >删除</a></li>
+      </ul>
+    </div>
+</td>

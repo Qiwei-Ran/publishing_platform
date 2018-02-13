@@ -1,0 +1,85 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav" id="side-menu">
+            {% include 'nav_li_profile.html' %}
+            <li class="default show_index">
+                <a href="/project/show_index"><i class="fa fa-th-large"></i> <span class="nav-label">概览页面</span><span
+                        class="label label-info pull-right"></span></a>
+                <!--<a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">仪表盘</span> <span class="fa arrow"></span></a>
+                  <ul class="nav nav-second-level">
+                      <li><a href="index.html">Dashboard v.1</a></li>
+                      <li ><a href="dashboard_2.html">Dashboard v.2</a></li>
+                      <li ><a href="dashboard_3.html">Dashboard v.3</a></li>
+                  </ul>-->
+            </li>
+            <li class="project auto">
+                <a href="###"><i class="fa fa-cube"></i> <span class="nav-label">项目管理</span><span
+                        class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li class="list1"><a href="/project/list1/">项目</a></li>
+                    <li class="list"><a href="/project/list/">项目列表</a></li>
+                    <li class="add"><a href="/project/add/">新建项目</a></li>
+                </ul>
+            </li>
+            <li class="config">
+                <a href="###"><i class="fa fa-cube"></i> <span class="nav-label ">配置管理</span><span
+                        class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="#">配置管理</a></li>
+                    <li class="host_list"><a href="/config/host_list/">主机列表</a></li>
+                    <li class="host_add"><a href="/config/host_add/">添加主机</a></li>
+                </ul>
+            </li>
+            <li class="users">
+                <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">用户管理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li class="user_list user_static old"><a href="/users/user_list/">查看用户</a></li>
+                    <li class="user_add"><a href="/users/user_add/">添加用户</a></li>
+                    <li class="department_list"><a href="/users/department_list/">查看部门</a></li>
+                    <li class="department_add"><a href="/users/department_add/">添加部门</a></li>
+                </ul>
+            </li>
+            <li class="perms">
+                <a href="#"><i class="glyphicon glyphicon-briefcase"></i> <span class="nav-label">权限管理</span><span
+                        class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li class="roles_list"><a href="/perms/roles_list/">角色列表</a></li>
+                    <li class="roles_add"><a href="/perms/roles_add/">添加角色</a></li>
+                </ul>
+            </li>
+            <li class="log">
+                <a href="#"><i class="glyphicon glyphicon-eye-open"></i> <span class="nav-label">日志审计</span><span
+                        class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li class="record_list"><a href="/log/record_list/"><i class="glyphicon glyphicon-tint"></i>操作记录</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+<!-- 右侧菜单栏控制 -->
+<script type="text/javascript">
+    var str = document.location.pathname.split("/")[1];
+    var two = document.location.pathname.split("/")[2];
+    var three = document.location.pathname.split("/")[3];
+
+    if (str == "project") {
+        if (two == "show_index") {
+            $("." + two).addClass('active');
+        }
+        else {
+            $("." + str).addClass('active');
+            $("." + two).addClass('active');
+        }
+    }
+    else {
+        try {
+            $("." + str).addClass('active');
+            $("." + two).addClass('active');
+        }
+        catch (err) {
+        }
+    }
+
+
+</script>

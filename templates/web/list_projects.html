@@ -1,0 +1,295 @@
+{% extends 'default/base.html' %}
+
+{% block content %}
+    {% load pagination_tags %}
+    <h2>项目列表</h2>
+
+    <style>
+        .test_width {
+            width: 130px;
+        }
+    </style>
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="ibox float-e-margins">
+                <div id="edit_result">
+                    <div class="ibox-title">
+                        <h5> 项目信息列表 <span style="color:red" id="count_project">总共有:{{ count.count }}个 项目</span></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user"></ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form id="project_form">{% csrf_token %}
+                            <div class="col-sm-3" style='float: right'> {# 哦？ #}
+                                <div class="input-group">
+                                    <input type="text" class="form-control m-b" id="search_input" name="keyword"
+                                           placeholder="Search">
+                                    <input type="text" style="display: none">
+                                    <div class="input-group-btn">
+                                        <button type="button" href="/project/search_project_ajax/?search=true"
+                                                name="search" class="btn btn-xm btn-primary search_btn"
+                                                onclick="return false">
+                                            搜索
+                                        </button>
+                                        {#                                    <button type="button" href="/assets/change_info_ajax/?_search=true" name="_search" class="btn btn-xm btn-success search_btn_pdf" onclick="return false">#}
+                                        {#                                        导出#}
+                                        {#                                    </button>#}
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-xm btn-success dropdown-toggle"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                导出
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="/assets/change_info_ajax/?_search=true&name=pdf"
+                                                       class="search_btn_pdf" name="search"
+                                                       onclick="return false">导出pdf</a></li>
+                                                <li><a href="/assets/change_info_ajax/?_search=true&name=excel"
+                                                       class="search_btn_pdf" name="search" onclick="return false">导出excel</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1 test_width" style="float: right">
+                                <label>
+                                    <select name="change_status" class="form-control m-b" onchange="change_info()">
+                                        <option value="">项目状态</option>
+                                        <option value="0">待发布</option>
+                                        <option value="1">测试中</option>
+                                        <option value="2">测试完成</option>
+                                        <option value="3">已发布</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div id="download"></div>
+                            <div id="replace">
+                                <table id="host_info" class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center"><input type="checkbox" id="select_all"
+                                                                       onclick="check_all('project_form')"></th>
+                                        <th class="text-center"> 项目名</th>
+                                        <th class="text-center"> 版本号</th>
+                                        <th class="text-center"> 创建时间</th>
+                                        <th class="text-center"> 状态</th>
+                                        <th class="text-center"> 操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for item in objects %}
+                                        <tr class="gradeX">
+                                            <td class="text-center" style="vertical-align:middle!important"><input
+                                                    type="checkbox" name="selected" value="{{ item.id }}"></td>
+                                            <td class="text-center" style="vertical-align:middle!important"
+                                                id="{{ item.name }}name"> {{ item.name }} </td>
+                                            <td class="text-center">
+                                                <select id="select_version_{{ item.id }}" name="select_version"
+                                                        class="form-control" onchange="change_version({{ item.id }})">
+                                                    {% for list in item.version %}
+                                                        <option value="{{ item.name }}-{{ list }}">{{ list }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                            <td class="text-center" style="vertical-align:middle!important"
+                                                id="{{ item.name }}time"> {{ item.create_time }} </td>
+                                            {% comment %}<td class="text-center" style="vertical-align:middle!important"> {{ item.state }} </td>{% endcomment %}
+                                            {% ifequal item.state 0 %}
+                                                <td class="text-center" style="vertical-align:middle!important"
+                                                    id="{{ item.name }}state"> 待发布
+                                                </td>
+                                            {% endifequal %}
+                                            {% ifequal item.state 1 %}
+                                                <td class="text-center" style="vertical-align:middle!important"
+                                                    id="{{ item.name }}state"> 测试中
+                                                </td>
+                                            {% endifequal %}
+                                            {% ifequal item.state 2 %}
+                                                <td class="text-center" style="vertical-align:middle!important"
+                                                    id="{{ item.name }}state"> 测试通过
+                                                </td>
+                                            {% endifequal %}
+                                            {% ifequal item.state 2 %}
+                                                <td class="text-center" style="vertical-align:middle!important"
+                                                    id="{{ item.name }}state"> 已发布
+                                                </td>
+                                            {% endifequal %}
+                                            {% ifequal item.state '' %}
+                                                <td class="text-center" style="vertical-align:middle!important"
+                                                    id="{{ item.name }}state"> 空状态
+                                                </td>
+                                            {% endifequal %}
+
+                                            <td class="text-center" style="vertical-align:middle!important">
+                                                <!-- Split button -->
+                                                <div class="btn-group">
+                                                    <a href="/project/detail/{{ item.id }}/"
+                                                       class="btn btn-info btn-sm">查看详情</a>
+                                                    <button type="button" class="btn btn-info btn-sm dropdown-toggle"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false">
+                                                        <span class="caret"></span>
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <ul class="dropdown-menu " style="min-width:100%;">
+                                                        <li><a  id="test_deploy_{{ item.id }}" onclick="test_push({{ item.id }})" >测试发布</a></li>
+                                                        <li><a href="#">测试确认</a></li>
+                                                        <li><a href="#">项目发布</a></li>
+                                                        <li role="separator" class="divider"></li>
+                                                        <li><a href="/project/delete/{{ item.id }}/" type="button"
+                                                               id="project_del" name="del_id">删除</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div id="host_list">
+                                            <button type="button" class="btn btn-danger" id="project_del_batch">批量删除
+                                            </button>
+                                            <a href="/project/add/" type="button" class="btn btn-info">添加项目</a>
+                                        </div>
+                                    </div>
+                                    {% if search %}
+                                        {% include 'web/paginator_search.html' %}
+                                    {% else %}
+                                        {% include 'web/paginator.html' %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#project_del_batch').click(function () {
+                var ids = getids();
+                if (ids == '') {
+                    alert("请至少选择一行!");
+                    return false;
+                }
+                if (confirm("确定删除")) {
+                    $.ajax({
+                        type: "post",
+                        data: {ids: ids},
+                        url: "/project/delete_batch/",
+                        headers: {"X-CSRFToken": $.cookie('csrftoken')},
+                        success: function () {
+                            window.location.reload();
+                        }
+                    });
+                }
+            });
+        });
+
+        $("#search_input").keydown(function (e) {
+            if (e.keyCode == 13) {
+                change_info()
+            }
+        });
+
+        $('.search_btn').unbind('click').bind('click', function () {
+            var url = $(this).attr("href");
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: $("#project_form").serialize(),
+                success: function (data) {
+                    $("#replace").html(data);
+                }
+            });
+        });
+
+        function change_info() {
+            $.ajax({
+                type: "GET",
+                url: "/project/search_project_ajax/",
+                data: $("#project_form").serialize(),
+                success: function (data) {
+                    $("#replace").html(data);
+                }
+            });
+        }
+
+        function change_version(id) {
+            $.ajax({
+                type: "GET",
+                url: "/project/select_version_ajax/",
+                data: $("#select_version_" + id).serialize(),
+                {% comment %}data: $("#select_version").serialize(),{% endcomment %}
+                success: function (data) {
+                    var name1 = data.project_name;
+                    var time = data.create_time;
+                    var state = data.state;
+                    var date = new Date(time);
+                    var str_time = date.getFullYear() + '年' + date.getMonth() + '月' + date.getDate() + '日' + ' ' + date.getHours() + ':' + date.getMinutes();
+
+                    window.console.log(str_time);
+                    $("#" + name1 + "name").text(name1);
+                    $("#" + name1 + "time").text(str_time);
+
+                    if (state == 0) {
+                        $("#" + name1 + "state").text("待发布1");
+                    } else if (state == 1) {
+                        $("#" + name1 + "state").text("测试中");
+                    } else if (state == 2) {
+                        $("#" + name1 + "state").text("测试通过");
+                    } else if (state == 3) {
+                        $("#" + name1 + "state").text("已发布");
+                    } else {
+                        $("#" + name1 + "state").text("空状态");
+                    }
+                    {% comment %}$("#"+name1+"name").text(name1);{% endcomment %}
+                }
+            });
+        }
+
+        {% comment %}$('#test-deploy').unbind('click').bind('click',function () {
+        var url = $(this).attr("href");
+        $.ajax({
+            type: "POST",
+            url:url,
+            data: $("#select_version_" + id).serialize(),
+            success
+
+            }
+        )
+    });{% endcomment %}
+
+        function test_push(id) {
+            /*var url = $("#test_deploy_" + id).attr("href");*/
+            $.ajax({
+                type: "POST",
+                url: "/project/test_push/",
+                data:$("#select_version_" + id).serialize(),
+                headers: {"X-CSRFToken": $.cookie('csrftoken')},
+                success: function (data) {
+                    layer.alert("成功");
+                    window.location.reload();
+                }
+                })
+        }
+    </script>
+
+{% endblock content %}
+
