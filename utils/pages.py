@@ -4,6 +4,8 @@ __author__ = 'QiweiRan'
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
+from django.utils import six
+
 
 def page_list_return(total, current=1):
     min_page = current - 2 if current - 4 > 0 else 1
@@ -18,7 +20,7 @@ def listing(result_list, request, per_page):
         current_page = int(request.GET.get('page', '1'))
     except ValueError:
         current_page = 1
-    page_range = page_list_return(len(paginator.page_range)+1, current_page)
+    page_range = page_list_return(len(paginator.page_range) + 1, current_page)
     try:
         objects = paginator.page(current_page)
     except (EmptyPage, PageNotAnInteger):
@@ -34,3 +36,23 @@ def listing(result_list, request, per_page):
         show_end = 0
 
     return result_list, paginator, objects, page_range, current_page, show_first, show_end
+
+
+'''
+class PaginatorAdd(object):
+    def __init__(self, current_page):
+        self.current_page = current_page
+
+    @property
+    def page_range(self):
+        """
+        Returns a 1-based range of pages for iterating through within
+        a template for loop.
+        """
+        min_page = self.current_page - 2 if self.current - 4 > 0 else 1
+        max_page = min_page + 4 if min_page + 4 < total else total
+        return range(min_page, max_page)
+        
+        return six.moves.range(min_page, max_page)
+
+    '''

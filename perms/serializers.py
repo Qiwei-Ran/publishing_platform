@@ -4,6 +4,8 @@ from users.models import CustomUser
 
 
 class AuthGroupSerializer(serializers.ModelSerializer):
+    group_user = serializers.SlugRelatedField(many=True, read_only=True, slug_field='first_name')
+
     class Meta:
         model = AuthGroup
         fields = '__all__'

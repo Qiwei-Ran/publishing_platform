@@ -42,9 +42,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						{% for item in content %}
+						{% for k,v in content.items %}
 						<tr>
-                            {% for k,v in  item.items  %}
 							<td width="200">{{ k }}</td>
 							<td>
 								{% for t in v.user_list %}
@@ -52,8 +51,7 @@
 								{% endfor %}
 							</td>
 							<td width="100"><a href="/users/department_edit/{{ v.department_id }}/" class="btn btn-xs btn-primary node-edit" >修改</a></td>
-						    {% endfor %}
-                        </tr>
+						</tr>
 						{% endfor %}
 					</tbody>
 				</table>

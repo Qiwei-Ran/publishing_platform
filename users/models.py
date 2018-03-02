@@ -86,7 +86,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(_(u'用户名'), max_length=30, unique=True)
     first_name = models.CharField(_(u'名字'), max_length=30, blank=False)
     last_name = models.CharField(_(u'last_name'), max_length=30, blank=False)
-    department = models.ForeignKey(DepartmentMode, blank=True, null=True, verbose_name=u'部门', related_name="users")
+    department = models.ForeignKey(DepartmentMode, blank=True, null=True, verbose_name=u'部门', related_name='users')
 
     mobile = models.CharField(_(u'手机'), max_length=30, blank=False,
                               validators=[validators.RegexValidator(r'^[0-9+()-]+$',
@@ -146,7 +146,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             'is_staff': self.is_staff,
         })
 
-
     @property
     def is_valid(self):
         if self.is_active and self.is_staff:
@@ -154,7 +153,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return False
 
     def __unicode__(self):
-        return self.first_name
+        return '%s' % self.first_name
 
     __str__ = __unicode__
 

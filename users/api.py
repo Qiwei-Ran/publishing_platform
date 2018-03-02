@@ -12,6 +12,7 @@ from serializers import DepartmentModeSerializer, CustomUserSerializer
 from users.models import CustomUser
 from users.models import DepartmentMode
 from utils.users_token import generate_token
+from utils.paginator import Paginator
 
 '''
 class DepartmentModeListApi(generics.ListAPIView):

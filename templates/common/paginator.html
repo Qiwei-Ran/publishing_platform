@@ -3,35 +3,37 @@
         <ul class="pagination" style="margin-top: 0; float: right">
             {% if page_obj.has_previous %}
                 <li class="paginate_button previous" aria-controls="editable" tabindex="0" id="editable_previous">
-                    <a href="?page={{ page_obj.previous_page_number }}">上一1页</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">上一页</a>
                 </li>
             {% else %}
                 <li class="paginate_button previous disabled" aria-controls="editable" tabindex="0" id="editable_previous">
-                     <a href="#">上一2页</a>
+                     <a href="#">上一页</a>
                 </li>
             {% endif %}
-            {% comment %}{% ifequal show_first 1 %}{% endcomment %}
-            {% ifequal page_obj.start_index 1 %}
 
+            {% ifequal page_obj.show_first 1 %}
                 <li class="paginate_button" aria-controls="editable" tabindex="0"><a href="?page=1"  title="第1页">1...</a></li>
             {% endifequal %}
-            {% for page in page_range %}
-                {% ifequal current_page page %}
+
+            {% for page in page_obj.current_page_range %}
+                {% ifequal page_obj.number page %}
                     <li class="paginate_button active"  aria-controls="editable" tabindex="0"><a href="?page={{ page }}"  title="第{{ page }}页">{{ page }}</a></li>
                 {% else %}
                     <li class="paginate_button" aria-controls="editable" tabindex="0"><a href="?page={{ page }}"  title="第{{ page }}页">{{ page }}</a></li>
                 {% endifequal %}
             {% endfor %}
-            {% ifequal show_end 1 %}
+
+            {% ifequal page_obj.show_end  1 %}
                 <li class="paginate_button" aria-controls="editable" tabindex="0"><a href="?page={{ paginator.num_pages }}"  title="第{{ page }}页">...{{ paginator.num_pages }}</a></li>
             {% endifequal %}
+
             {% if page_obj.has_next %}
                 <li class="paginate_button next" aria-controls="editable" tabindex="0" id="editable_next">
-                    <a href="?page={{ objects.next_page_number }}">下一1页</a>
+                    <a href="?page={{ page_obj.next_page_number }}">下一页</a>
                 </li>
             {% else %}
                 <li class="paginate_button next disabled" aria-controls="editable" tabindex="0" id="editable_next">
-                    <a href="#">下一2页</a>
+                    <a href="#">下一页</a>
                 </li>
             {% endif %}
         </ul>

@@ -18,30 +18,33 @@ from django.views.generic import ListView
 from django.views.generic import UpdateView, CreateView
 # class based view
 from django.views.generic.edit import FormView
+from itertools import chain
 
 from log.decorator import record
 from perms.auth_handle import auth_dict_class
 from users.forms import UserCreateForm, DepartmentFrom, LoginForm, UserEditForm
 from users.models import (CustomUser, DepartmentMode)
 from utils.generate_uuid import web_uuid
-
-logger = logging.getLogger('publishing_platform.web.view')
 from django.views.generic import View
 from django.shortcuts import get_object_or_404
 from perms.decorator import auth_check
+from utils.paginator import Paginator
 
+logger = logging.getLogger('publishing_platform.web.view')
 """
 用户管理
 """
 
 
 # 用户列表
-@method_decorator(auth_check('add_department'), name='dispatch')
 @method_decorator(login_required(), name='dispatch')
+@method_decorator(auth_check('add_department'), name='dispatch')
 class UserListView(ListView):
     template_name = 'users/user_list.html'
     context_object_name = 'uf'
     queryset = CustomUser.objects.filter(is_active=True, is_staff=True)
+    paginate_by = 2
+    paginator_class = Paginator
 
 
 '''
@@ -61,6 +64,12 @@ def user_list(request):
     # return render_to_response('users/user_list.html', result)
     return render(request, 'users/user_list.html', locals())
 '''
+
+'''
+    def get_context_data(self, **kwargs):
+        context = super(UserListView, self).get_context_data(**kwargs)
+        context['paginate_ additional'] = li
+    '''
 
 
 # 修改账户
@@ -360,12 +369,31 @@ def user_status(request, id):
 # department manager
 
 # 部门列表
-@method_decorator(auth_check('add_department'), name='dispatch')
 @method_decorator(login_required(), name='dispatch')
+@method_decorator(auth_check('add_department'), name='dispatch')
 class DepartmentListView(ListView):
     template_name = 'users/department_list.html'
     context_object_name = 'content'
 
+    # template_name = 'index1.html'
+    # model = DepartmentMode
+    paginate_by = 2
+    paginator_class = Paginator
+
+    def get_queryset(self):
+        self.queryset = DepartmentMode.objects.all()
+        content = list()
+
+        for item in self.queryset:
+            users_list = list()
+            dep_all = item.users.all().values("first_name")
+            for t in dep_all:
+                users_list.append(t.get("first_name"))
+
+            content.append({item.department_name: {"user_list": users_list, "department_id": item.id}})
+        return content
+
+    '''
     def get_queryset(self):
         self.queryset = DepartmentMode.objects.all()
         content = {}
@@ -376,6 +404,8 @@ class DepartmentListView(ListView):
                 users_list.append(t.get("first_name"))
             content[i.department_name] = {"user_list": users_list, "department_id": i.id}
         return content
+
+    '''
 
 
 '''

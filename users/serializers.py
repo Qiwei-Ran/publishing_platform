@@ -4,12 +4,16 @@ from rest_framework_bulk import BulkListSerializer, BulkSerializerMixin
 
 
 class DepartmentModeSerializer(serializers.ModelSerializer):
+    users = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = DepartmentMode
-        fields = ('id', 'department_name', 'description', 'desc_gid')
+        fields = ('id', 'department_name', 'description', 'desc_gid', 'users')
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    department = serializers.SlugRelatedField(read_only=True, slug_field='department_name')
+
     class Meta:
         model = CustomUser
         list_serializer_class = BulkListSerializer

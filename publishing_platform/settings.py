@@ -12,10 +12,14 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import sys
 import time
+from utils.paginator import Paginator
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 
+log_dir = '/var/log/publishing_platform/'
+if not os.path.isdir(log_dir):
+    os.mkdir(log_dir)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
@@ -194,6 +198,7 @@ CONFIG = type('_', (), {'__getattr__': lambda arg1, arg2: None})()
 # The rest_framework of Django
 REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'DEFAULT_PERMISSION_CLASSES': [
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
         'users.permissions.IsSuperUser',

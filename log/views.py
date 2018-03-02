@@ -14,6 +14,7 @@ from django.views.generic import ListView, View
 from django.views.generic.edit import DeleteView
 from django.urls import reverse_lazy
 from perms.decorator import auth_check
+from utils.paginator import Paginator
 
 logger = logging.getLogger('publishing_platform.web.view')
 
@@ -22,6 +23,8 @@ class RecordListView(ListView):
     template_name = 'log/record_list.html'
     context_object_name = 'data'
     queryset = OperaRecord.objects.all()
+    paginate_by = 2
+    paginator_class = Paginator
 
 
 '''

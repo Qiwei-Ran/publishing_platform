@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<h1>test page</h1>
+<h1>test page1</h1>
 {% comment %}<h3>{{ good }}</h3>{% endcomment %}
 
 
@@ -44,17 +44,34 @@
 
 {% comment %}<p>{{ detail.project_name }}</p>
 <p>{{ detail.deploy_address }}</p>{% endcomment %}
-{% for item in  data %}
-    {#    <h1>{{ results }}</h1> #}
-    <p>{{ item.project_name }}</p>
-    <p>{{ item.svn_address }}</p>
-{% endfor %}
-
-{% comment %}
-{% for k,v in  group_user_count.items%}
+{% comment %}{% for k,v in content %}
     <p>{{ k }}</p>
     <p>{{ v }}</p>
-{% endfor %}{% endcomment %}
+{% endfor %}
+++++++++++++++{% endcomment %}
+
+{% for item in  content %}
+    {#    <h1>{{ results }}</h1> #}
+    {% comment %}<p>{{ item }}</p>{% endcomment %}
+
+    {% for k,v in  item.items  %}
+        <p>{{ k }}</p>
+        <p>{{ v.user_list }}</p>
+        <p>{{ v.department_id }}</p>
+
+        {% for i in v.user_list %}
+            <p>{{ i }}</p>
+        {% endfor %}
+
+        {% endfor %}
+
+
+
+{% endfor %}
+
+
+
+
 
 
 {% comment %}p>{{ results.username }}</p>{% endcomment %}
